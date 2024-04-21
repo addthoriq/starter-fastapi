@@ -1,9 +1,8 @@
-from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from ...models.tokenModel import Token
 from ...controllers.auth_controller import *
-from app.models import schemas
+from app.models import userModel
 
 router = APIRouter()
 
@@ -36,14 +35,14 @@ def login_for_access_token(
     )
 
 user_deps = Annotated[dict, Depends(get_current_user)]
-@router.get('/me', response_model=schemas.User)
+@router.get('/me', response_model=userModel.User)
 def read_user_me(user: user_deps):
     return user
 
 @router.put('/change-password')
 def modify_password(
-        user: schemas.UserChangePassword,
-        userLogin: schemas.User = Depends(get_current_user),
+        user: userModel.UserChangePassword,
+        userlogin: userModel.User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    return change_password(db, user.old_password, user.new_password, userLogin)
+    return change_password(db, user.old_password, user.new_password, userlogin)

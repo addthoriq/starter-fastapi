@@ -5,7 +5,6 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from sqlalchemy import select
 from ..api.dependency import get_db
 from ..migrations import database_migrations as schemes
 
