@@ -79,3 +79,15 @@ async def get_current_user(
         raise credentials_exception
 
     return user
+
+
+def change_password(db: Session, old_password: str, new_password: str, current_user: schemes.User):
+    user = get_user_by_username(db, username=current_user.username)
+    if not verify_password(old_password, user.hashed_password):
+        return False
+    if old_password == new_password:
+        return False
+    user.hashed_password = pwd_context.hash(new_password)
+    db.commit()
+    db.refresh(user)
+    return user

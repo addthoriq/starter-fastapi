@@ -39,3 +39,11 @@ user_deps = Annotated[dict, Depends(get_current_user)]
 @router.get('/me', response_model=schemas.User)
 def read_user_me(user: user_deps):
     return user
+
+@router.put('/change-password')
+def modify_password(
+        user: schemas.UserChangePassword,
+        userLogin: schemas.User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
+    return change_password(db, user.old_password, user.new_password, userLogin)
