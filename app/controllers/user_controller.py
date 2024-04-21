@@ -1,6 +1,8 @@
+from fastapi import HTTPException
 from passlib.context import CryptContext
-from ..models import schemas as models
 from sqlalchemy.orm import Session
+from sqlalchemy import select, update
+from ..models import schemas as models
 from ..migrations import database_migrations as schemes
 
 def get_user(db: Session, user_id: int):
@@ -41,3 +43,22 @@ def create_user(db: Session, user: models.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def update_user(db: Session, user: models.UserUpdate, user_id: int):
+    hashed_password = pwd_context.hash(user.password)
+    db_user = get_user(db, user_id)
+    db_user.email=user.email,
+    db_user.hashed_password=hashed_password,
+    db_user.username=user.username,
+    db_user.name=user.name
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def delete_user(
+        db: Session,
+        user_id: int
+):
+    db_user = get_user(db, user_id)
+    db.delete(db_user)
+    db.commit()

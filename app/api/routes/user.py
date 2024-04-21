@@ -1,4 +1,3 @@
-from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..dependency import get_db
@@ -55,3 +54,18 @@ def get_user(
             detail="User not found",
         )
     return db_user
+
+@router.put('/{user_id}/update', tags=["user"], response_model=schemas.User)
+def update_user(
+        user_id: int,
+        user: schemas.UserUpdate,
+        db: Session = Depends(get_db),
+):
+    return user_controller.update_user(db=db, user=user, user_id=user_id)
+
+@router.delete('/{user_id}/delete', tags=["user"], status_code=204)
+def delete_user(
+        user_id: int,
+        db: Session = Depends(get_db),
+):
+    return user_controller.delete_user(db, user_id=user_id)
