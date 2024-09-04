@@ -1,0 +1,7 @@
+.idea/
+**__pycache__**
+*.**_cache
+*.**_cache
+.vscode/
+.zed/
+.env
