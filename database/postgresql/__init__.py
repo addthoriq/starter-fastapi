@@ -1,0 +1,1 @@
+POSTGRESQL_ALEMBIC = "./database/postgresql/migrations/alembic.ini"
